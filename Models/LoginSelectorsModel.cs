@@ -14,5 +14,6 @@ namespace TestPartnersPages.Models
         public string UserNameInput { get; set; }
         public string PasswordInput { get; set; }
         public string LoginBtn { get; set; }
+        public string LoginBtn2 { get; set; }
     }
 }
