@@ -3,7 +3,7 @@
 namespace TestPartnersPages.Models
 {
     public class CheckBetModel
-     {
+    {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         //public string BetFrameName { get; set; }
         public string GameBetElement { get; set; }
@@ -13,6 +13,7 @@ namespace TestPartnersPages.Models
         public string MultipleBetAmountInputElement { get; set; }
         public string MultipleBetAmount { get; set; }
         public string WaitAfterBetElement { get; set; }
+        public string Helo { get; set; }
 
     }
 }
