@@ -34,7 +34,7 @@ namespace QuickCheck
                 {
                     try
                     {
-                        var nju = "asdasd";
+                        
                         var page = new Page(driver);
                         page.Open(partnerData.Url);
                         page.LogintoMyPage(partnerData.LoginCssSelectors, partnerData.UserName, partnerData.Password, partnerData.PartnerName);
