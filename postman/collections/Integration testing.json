@@ -1,0 +1,1259 @@
+{
+	"info": {
+		"_postman_id": "1dcefa06-1d29-4f41-9d9a-ed63640e9004",
+		"name": "Integration testing",
+		"description": "> This collection identifies test cases to ensure that various Intergalactic Bank API modules function as expected with other modules within the API and also third-party services. Check out the [End-to-End](https://www.postman.com/templates/68de712c-6b56-4e31-8b0b-627360820279/End-to-end-testing) and [Functional](https://www.postman.com/templates/f26ad070-d626-4d75-b151-7cbf1a48ed11/Functional-testing) testing collection to see other test cases for this API. \n  \n\n## 🪐 Get started\n\nThe fictional Intergalactic Bank Services team is responsible for testing the integration workflows included in this collection. You can use this collection to validate specific workflows that your team relies on. Or suggest ways to increase test coverage and make your own applications more resilient.\n\nSteps to test the Intergalactic Bank API:\n\n1. **Review tests and scripts:** [Tests](https://learning.postman.com/docs/writing-scripts/test-scripts/) are written under the Scripts tab at the folder and request levels. Different testing requirements are distributed between the folders, so be sure to read the documentation for each folder to understand what is being tested.\n    \n2. **Run tests:** To run the collection, navigate to Run Collection from the collection menu. You can also elect to run only a folder if you are interested in testing a subset of the use cases. Be aware that many of these tests contain logic that passes information between requests, and they are meant to be run in order from top to bottom. If sending the requests manually or out of order, your results may vary.\n    \n3. **Review test results:** We have included error messages for many of the test cases to help debug what may be wrong with the service. If using this collection as a pre-merge check, be sure to have all tests passing before submitting (and no, deleting the failing test cases isn’t an option 😉).\n    \n\nFor more details, check out the additional sections below, and click `View Complete Documentation` for the complete documentation. If you have questions about the folder or request, look for the documentation icon for documentation-in-context.\n\n## ⚙️Integrating with third-party APIs\n\nYou will notice that we have two different APIs involved in this test collection: our Intergalactic Bank API that handles Accounts and Transactions, and the ATM locator API run by our partners.\n\n- **Differentiating these services:** Each service is represented by a different URL variable in the request: {{baseUrl}} for our Intergalactic Bank API, and {{atmLocatorUrl}} for the ATM locator service.\n    \n- **Production vs Mocks:** We are running these tests against the production service, but if you are setting up integration tests for the first time or have strict usage limits, consider swapping the production URL for a mock server.\n    \n- **Alert to changes:** We have this collection set up on a monitor to run every day. Since we have tests for all of the properties we use in our production systems, this will alert us if any breaking changes have been pushed to this API by our partners, so we can immediately remedy the situation.\n    \n\n## 🔒Authenticating multiple APIs\n\nNote that there are two different auth schemes for the two different APIs we are testing here. As the majority of the calls belong to the Intergalactic Bank API, we have set that authorization at the collection level, and have the relevant calls set to inherit this auth from the top level. For the ATM Locator API, we specify its specific API key at the request level.\n\n## 👀 View and share run results\n\nInterested in seeing previous run results? We’re happy to share, and have a few ways for you to stay in the loop:\n\n- You can also share individual run reports from this page.\n    \n- Monitors: If you have a monitor set up for this collection, you can see historical run information by clicking on the Monitors tab on the right sidebar. You can also have the results sent to Slack or other services by setting up an integration.\n    \n\n## 🤝Increase test coverage\n\nThe Intergalactic Bank Services team wants your team to have everything they need to successfully test our services with their applications. Is your team utilizing this API in a use case not represented here? Reach us on our internal Slack by tagging @bank-services. Or add an [inline comment](https://learning.postman.com/docs/collaborating-in-postman/working-with-your-team/discussing-your-work/) to this collection with your test case suggestions.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "15658005-1dcefa06-1d29-4f41-9d9a-ed63640e9004"
+	},
+	"item": [
+		{
+			"name": "Auth Setup",
+			"item": [
+				{
+					"name": "Generate new API key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let response = pm.response.json()",
+									"//save api key for use in the following folders",
+									"pm.collectionVariables.set('bankApiKey', response.apiKey)",
+									"",
+									"//Test data type",
+									"pm.test(\"Test data type of the response\", () => {",
+									"  pm.expect(response).to.be.an(\"object\", \"response is not an object\");",
+									"  pm.expect(response.apiKey).to.be.a(\"string\", \"apiKey field is not a string\");",
+									"});"
+								],
+								"id": "7a30e52d-982f-4613-800d-a57c3dcf7793"
+							}
+						}
+					],
+					"id": "a2dfe244-cd85-451d-954e-5547d16466f1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth"
+							]
+						},
+						"description": "Generate a new API Key and save it as a collection variable."
+					},
+					"response": [
+						{
+							"id": "df6738a8-7ad7-4864-8b59-3b4bf34ba13f",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/auth",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 10 Mar 2024 21:42:21 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "43"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"apiKey\": \"123456789\"\n}"
+						}
+					]
+				}
+			],
+			"id": "ded46866-285e-43fb-a6f0-cff593a44076",
+			"description": "This folder sets up the resources needed for the test folders later in the collection:\n\n1. **Generate New API Key** \\- Generates a new API key for use in the collection and saves the value as a collection variable, authorizing all requests following."
+		},
+		{
+			"name": "Check if a Cosmic Coin ATM is open now",
+			"item": [
+				{
+					"name": "Create Account (1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let response = pm.response.json()",
+									"",
+									"//Test data type and save new Account ID",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(response).to.be.an(\"object\", \"Response is not an object\");",
+									"    pm.expect(response.account).to.be.an(\"object\", \"Acount is not an object\");",
+									"    pm.expect(response.account).to.have.property('id')",
+									"    pm.expect(response.account.id).to.be.a('number')",
+									"    //Set a collection variable, only if the id exists (the script will not make it here if the above tests fail.)",
+									"    pm.collectionVariables.set('accountId1', response.account.id)",
+									"})",
+									""
+								],
+								"id": "86031893-2214-46f4-a85a-dac40d287c72"
+							}
+						}
+					],
+					"id": "12daa290-1233-463e-9feb-fcd5de95a45a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"owner\": \"{{$randomFirstName}} {{$randomLastName}}\",\n \t\"balance\" : 500,\n    \"currency\" : \"COSMIC_COINS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/accounts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"accounts"
+							]
+						},
+						"description": "Here, we are creating a new account using the Cosmic Coins currency. We are storing the newly created account's id as a collection variable for use in the next request."
+					},
+					"response": [
+						{
+							"id": "c8ec1e8a-13ba-4865-84ab-ac616f80671f",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"owner\": \"{{$randomFirstName}} {{$randomLastName}}\",\n \t\"balance\" : 500,\n    \"currency\" : \"COSMIC_COINS\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 11 Mar 2024 01:01:19 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "22"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"account\": {\n        \"id\": 144\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get account & save preferred currency",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let response = pm.response.json()",
+									"//save currency from response so we can find a matching ATM in the next request",
+									"pm.collectionVariables.set('currency', response.account.currency)",
+									"",
+									"//Test data type",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(response).to.be.an(\"object\", \"Response is not an object\");",
+									"    pm.expect(response.account).to.be.an(\"object\", \"Acount is not an object\");",
+									"    pm.expect(response.account).to.have.all.keys('id', 'owner', 'balance', 'currency', 'createdAt');",
+									"    pm.expect(response.account.id).to.be.a('number', \"id is not an number\")",
+									"    pm.expect(response.account.owner).to.be.a('string', \"owner is not an string\")",
+									"    pm.expect(response.account.balance).to.be.a('number', \"balance is not an number\")",
+									"    pm.expect(response.account.currency).to.be.a('string', \"currency is not a string\")",
+									"    pm.expect(response.account.currency).to.be.oneOf([\"COSMIC_COINS\", \"GALAXY_GOLD\", \"MOON_BUCKS\"], \"Invalid currency type\");",
+									"});",
+									"",
+									""
+								],
+								"id": "0b6de6b7-1f9a-489a-938a-c042916b0e4a"
+							}
+						}
+					],
+					"id": "dcde8d62-9e92-4848-b056-638f38345a81",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/accounts/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{accountId1}}"
+								}
+							]
+						},
+						"description": "Gets the account that was just created and saves the preferred currency."
+					},
+					"response": [
+						{
+							"id": "880b0419-73e2-4a20-8299-1d626874ed66",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{accountId1}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 11 Mar 2024 01:01:41 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "123"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"account\": {\n        \"id\": 144,\n        \"owner\": \"Rubie Emard\",\n        \"balance\": 500,\n        \"currency\": \"COSMIC_COINS\",\n        \"createdAt\": \"2024-03-11T01:01:19.000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Check if any Cosmic Coin ATMs are open",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let response = pm.response.json()",
+									"",
+									"//get all locations that take cosmic coins into one list",
+									"let cosmicCoinLocations = response.space_currencies.find(e => e.currency_name === 'COSMIC_COINS')",
+									"pm.test(\"At least one ATM on the list accepts cosmic coins \", function(){",
+									"    pm.expect(cosmicCoinLocations.atm_locations.length).to.be.gte(1)",
+									"})",
+									"",
+									"//of these cosmic coin locations, filter for all of the locations open now",
+									"let locationsOpenNow = cosmicCoinLocations.atm_locations.filter(e => e.isOpenNow === true)",
+									"pm.test(\"At least one Cosmic Coin ATM is open now\", function(){",
+									"    //is the number of entries in our array of ATMs open now greater than or equal to (gte) 1?",
+									"    pm.expect(locationsOpenNow.length).to.be.gte(1)",
+									"})",
+									"",
+									"//Test data type",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(response).to.be.an(\"object\", \"Response is not an object\");",
+									"    pm.expect(response.space_currencies).to.be.an(\"array\", \"space_currencies is not an array\");",
+									"    pm.expect(response.space_currencies[0]).to.have.all.keys('currency_code', 'currency_name', 'atm_locations');",
+									"    pm.expect(response.space_currencies[0].currency_name).to.be.a('string', \"currency_name is not a string\")",
+									"});"
+								],
+								"id": "1cb6b0fd-57ba-4406-b56e-f0172d1f0da9"
+							}
+						}
+					],
+					"id": "d739d84e-21ac-4dc3-b35b-f0c1e5bcc71e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "key",
+									"value": "api-key",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": "{{atmLocatorApiKey}}",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"type": "any"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{atmLocatorUrl}}/api/v1/locations",
+							"host": [
+								"{{atmLocatorUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"locations"
+							]
+						},
+						"description": "Queries the ATM Locator API and checks that:\n\n1. At least one ATM on the list accepts Cosmic Coins\n    \n2. At least one of these locations is open now"
+					},
+					"response": [
+						{
+							"id": "37b6abcb-e968-46c2-ad91-ac81319fec05",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{atmLocatorUrl}}/api/v1/locations",
+									"host": [
+										"{{atmLocatorUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"locations"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 11 Mar 2024 01:01:50 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1453"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"space_currencies\": [\n        {\n            \"currency_code\": \"CC\",\n            \"currency_name\": \"COSMIC_COINS\",\n            \"atm_locations\": [\n                {\n                    \"planet\": \"Mercury\",\n                    \"location\": \"Solar Banking Tower, Mercury Base\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": false,\n                    \"isOpenNow\": true\n                },\n                {\n                    \"planet\": \"Mars\",\n                    \"location\": \"Red Planet Financial Hub, Olympus Mons\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": false\n                },\n                {\n                    \"planet\": \"Jupiter\",\n                    \"location\": \"Jovian Capital Bank, Great Red Spot\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": true\n                }\n            ]\n        },\n        {\n            \"currency_code\": \"MB\",\n            \"currency_name\": \"MOON_BUCKS\",\n            \"atm_locations\": [\n                {\n                    \"planet\": \"Titan\",\n                    \"location\": \"Titanian Financial Center, Kraken Mare\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": false,\n                    \"isOpenNow\": true\n                },\n                {\n                    \"planet\": \"Europa\",\n                    \"location\": \"Europan Exchange, Conamara Chaos\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": false\n                },\n                {\n                    \"planet\": \"Enceladus\",\n                    \"location\": \"Ice Castle Bank, Tiger Stripes\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": true\n                }\n            ]\n        },\n        {\n            \"currency_code\": \"GG\",\n            \"currency_name\": \"GALAXY_GOLD\",\n            \"atm_locations\": [\n                {\n                    \"planet\": \"Venus\",\n                    \"location\": \"Venusian Treasury, Aphrodite Terra\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": false,\n                    \"isOpenNow\": true\n                },\n                {\n                    \"planet\": \"Saturn\",\n                    \"location\": \"Saturnian Financial Plaza, Rings of Saturn\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": false\n                },\n                {\n                    \"planet\": \"Uranus\",\n                    \"location\": \"Uranian Credit Union, Miranda\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": true\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"id": "e02b52c3-59bb-4b0a-bd9d-541ae09fed5e",
+			"description": "Here we are using the Intergalactic Bank API and ATM locator API to check if any suitable ATMs are open for a newly created account.\n\nWe are checking to see if the currency of the newly created account matches the currencies accepted by any open ATMs."
+		},
+		{
+			"name": "Check if Cosmic Coins can be deposited",
+			"item": [
+				{
+					"name": "Create Account (2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let response = pm.response.json()",
+									"//Test data type and save new Account ID",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(response).to.be.an(\"object\", \"Response is not an object\");",
+									"    pm.expect(response.account).to.be.an(\"object\", \"Acount is not an object\");",
+									"    pm.expect(response.account).to.have.property('id')",
+									"    pm.expect(response.account.id).to.be.a('number')",
+									"    //Set a collection variable, only if the id exists (the script will not make it here if the above tests fail.)",
+									"    pm.collectionVariables.set('accountId2', response.account.id)",
+									"})",
+									""
+								],
+								"id": "0965b3fa-baaf-42f7-871f-239836541cc9"
+							}
+						}
+					],
+					"id": "a3b2b746-0331-47ba-beb1-557a0127dfe9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"owner\": \"{{$randomFirstName}} {{$randomLastName}}\",\n \t\"balance\" : 0,\n    \"currency\" : \"COSMIC_COINS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/accounts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"accounts"
+							]
+						},
+						"description": "Here, we are creating a new account with the preferred currency as Cosmic Coins. We are storing the newly created account's id as a collection variable for use in the next request."
+					},
+					"response": [
+						{
+							"id": "a8406a2e-351f-4ee3-a6b6-a522e43daa58",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"owner\": \"{{$randomFirstName}} {{$randomLastName}}\",\n \t\"balance\" : 0,\n    \"currency\" : \"COSMIC_COINS\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 11 Mar 2024 01:01:58 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "22"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"account\": {\n        \"id\": 145\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Check if ATM accepts Cosmic Coins",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"let response = pm.response.json()",
+									"",
+									"//get all locations that take cosmic coins into one list",
+									"let cosmicCoinLocations = response.space_currencies.find(e => e.currency_name === 'COSMIC_COINS')",
+									"pm.test(\"At least one ATM on the list accepts cosmic coins \", function(){",
+									"    //is the number of entries in our array of CC ATM locationss open now greater than or equal to (gte) 1:",
+									"    pm.expect(cosmicCoinLocations.atm_locations.length).to.be.gte(1)",
+									"})",
+									"",
+									"//of these locations, see if at least one accepts transfers",
+									"let transfersAccepted = cosmicCoinLocations.atm_locations.filter(e => e.transfersAccepted === true)",
+									"pm.test(\"At least one Cosmic Coin ATM accepts transfers\", function(){",
+									"    //is the number of entries in our array of ATMs accepting transfers greater than or equal to (gte) 1:",
+									"    pm.expect(transfersAccepted.length).to.be.gte(1)",
+									"})",
+									"",
+									"//Test data type",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(response).to.be.an(\"object\", \"Response is not an object\");",
+									"    pm.expect(response.space_currencies).to.be.an(\"array\", \"space_currencies is not an array\");",
+									"    pm.expect(response.space_currencies[0]).to.have.all.keys('currency_code', 'currency_name', 'atm_locations');",
+									"    pm.expect(response.space_currencies[0].currency_name).to.be.a('string', \"currency_name is not a string\")",
+									"});"
+								],
+								"id": "5e4a36fd-82fb-4321-a096-7fa6b5667881"
+							}
+						}
+					],
+					"id": "c77b8f83-e17d-4e35-9565-9bda8e1b691a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "key",
+									"value": "api-key",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": "{{atmLocatorApiKey}}",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"type": "any"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{atmLocatorUrl}}/api/v1/locations",
+							"host": [
+								"{{atmLocatorUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"locations"
+							]
+						},
+						"description": "Queries the ATM Locator API and checks that:\n\n1. At least one ATM on the list accepts Cosmic Coins\n    \n2. At least one of these locations accepts transfers"
+					},
+					"response": [
+						{
+							"id": "744c0ad5-5afa-4194-a01f-5df8d6150e5c",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{atmLocatorUrl}}/api/v1/locations",
+									"host": [
+										"{{atmLocatorUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"locations"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 11 Mar 2024 01:02:05 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1453"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"space_currencies\": [\n        {\n            \"currency_code\": \"CC\",\n            \"currency_name\": \"COSMIC_COINS\",\n            \"atm_locations\": [\n                {\n                    \"planet\": \"Mercury\",\n                    \"location\": \"Solar Banking Tower, Mercury Base\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": false,\n                    \"isOpenNow\": true\n                },\n                {\n                    \"planet\": \"Mars\",\n                    \"location\": \"Red Planet Financial Hub, Olympus Mons\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": false\n                },\n                {\n                    \"planet\": \"Jupiter\",\n                    \"location\": \"Jovian Capital Bank, Great Red Spot\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": true\n                }\n            ]\n        },\n        {\n            \"currency_code\": \"MB\",\n            \"currency_name\": \"MOON_BUCKS\",\n            \"atm_locations\": [\n                {\n                    \"planet\": \"Titan\",\n                    \"location\": \"Titanian Financial Center, Kraken Mare\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": false,\n                    \"isOpenNow\": true\n                },\n                {\n                    \"planet\": \"Europa\",\n                    \"location\": \"Europan Exchange, Conamara Chaos\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": false\n                },\n                {\n                    \"planet\": \"Enceladus\",\n                    \"location\": \"Ice Castle Bank, Tiger Stripes\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": true\n                }\n            ]\n        },\n        {\n            \"currency_code\": \"GG\",\n            \"currency_name\": \"GALAXY_GOLD\",\n            \"atm_locations\": [\n                {\n                    \"planet\": \"Venus\",\n                    \"location\": \"Venusian Treasury, Aphrodite Terra\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": false,\n                    \"isOpenNow\": true\n                },\n                {\n                    \"planet\": \"Saturn\",\n                    \"location\": \"Saturnian Financial Plaza, Rings of Saturn\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": false\n                },\n                {\n                    \"planet\": \"Uranus\",\n                    \"location\": \"Uranian Credit Union, Miranda\",\n                    \"transfersAccepted\": true,\n                    \"depositsAccepted\": true,\n                    \"isOpenNow\": true\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Create transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"pm.test(\"Should display a successful transaction message\", function () {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(response).to.be.an(\"object\", \"Response is not an object\");",
+									"    pm.expect(response.success).to.be.a(\"boolean\", \"Success is not a boolean\");",
+									"    pm.expect(response.transaction).to.be.an(\"object\", \"Transaction is not an object\");",
+									"    pm.expect(response.transaction.id).to.be.a('number')",
+									"})",
+									""
+								],
+								"id": "338fc9d1-0911-438f-bd52-97f720068c1e"
+							}
+						}
+					],
+					"id": "070f075a-50c7-4e88-8253-e740a7e55c59",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "api-key",
+								"value": "1234"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fromAccountId\": {{accountId1}},\n    \"toAccountId\": {{accountId2}},\n    \"amount\": 20,\n    \"currency\": \"COSMIC_COINS\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							]
+						},
+						"description": "Once we have confirmed that at least one ATM location accepts transfers in our preferred currency, we will generate a new transaction."
+					},
+					"response": [
+						{
+							"id": "22076884-01ba-4e35-b61a-cae67a6c3728",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "api-key",
+										"value": "1234"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"fromAccountId\": {{accountId1}},\n    \"toAccountId\": {{accountId2}},\n    \"amount\": 20,\n    \"currency\": \"COSMIC_COINS\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 11 Mar 2024 01:02:12 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"transaction\": {\n        \"id\": 64\n    }\n}"
+						}
+					]
+				}
+			],
+			"id": "72375972-8ed2-419d-a0ad-e57a7d758466",
+			"description": "Here we are using the Intergalactic Bank API and ATM locator API to check if any suitable ATMs are open and accept transfers for a newly created account's preferred currency.\n\nWe are checking to see if the currency of the newly created account matches the currencies accepted for transfers by any open ATMs."
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "Delete Account 1",
+					"id": "75501eae-3032-4be5-b8a5-ccbcc62f89d3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/accounts/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{accountId1}}"
+								}
+							]
+						},
+						"description": "Delete Account 1 to clean up our work."
+					},
+					"response": [
+						{
+							"id": "0b94f2a8-4fa7-4ea6-ab1d-0d507892b2f2",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://template.postman-echo.com/api/v1/accounts/:id",
+									"protocol": "https",
+									"host": [
+										"template",
+										"postman-echo",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"id": "d3955557-99f5-4b12-9c5f-e2ee8e19c18a",
+							"name": "Not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "15"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 13:18:51 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"instanceNotFound\",\n    \"message\": \"Account does not exist.\"\n}"
+						},
+						{
+							"id": "aeca5636-1eb3-4a8e-b964-0d25b8f3af16",
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "22"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 13:21:35 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"invalidAuth\",\n    \"message\": \"Please provide a valid API key in the header of the request.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Account 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.collectionVariables.unset(\"accountId1\")",
+									"pm.collectionVariables.unset(\"accountId2\")",
+									"pm.collectionVariables.unset(\"currency\")",
+									"",
+									""
+								],
+								"id": "803cf188-afb8-42cc-a1d7-953e96dfd137"
+							}
+						}
+					],
+					"id": "718be50e-1189-4077-afa0-86059aa98d89",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/accounts/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{accountId2}}"
+								}
+							]
+						},
+						"description": "Delete Account 2 and the collection variables created during this collection run."
+					},
+					"response": [
+						{
+							"id": "c9054b09-7c40-4d39-b4eb-3c4683c15af0",
+							"name": "Successful Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://template.postman-echo.com/api/v1/accounts/:id",
+									"protocol": "https",
+									"host": [
+										"template",
+										"postman-echo",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"id": "d98efbbf-c388-4144-bc3c-ac3a98546c91",
+							"name": "Not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "15"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 13:18:51 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"instanceNotFound\",\n    \"message\": \"Account does not exist.\"\n}"
+						},
+						{
+							"id": "165a232c-1037-4195-adfa-9309bb314df4",
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/accounts/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"accounts",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "22"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 17 Feb 2024 13:21:35 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "uWebSockets",
+									"value": "20"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"invalidAuth\",\n    \"message\": \"Please provide a valid API key in the header of the request.\"\n}"
+						}
+					]
+				}
+			],
+			"id": "c434448c-a768-461b-9646-e6547d12dbf4",
+			"description": "These requests will clean up the accounts and variables created during the run of this collection so that the collection is ready to run again."
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{bankApiKey}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "24293f29-1df1-4ee2-9432-230a9a0b45a8"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				],
+				"id": "8104b831-37d5-43d2-8713-413c297f1387"
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7a859f84-05e3-4d98-b9b8-e6f4e5e68707",
+			"key": "baseUrl",
+			"value": "https://template.postman-echo.com",
+			"type": "string"
+		},
+		{
+			"id": "33287272-6c1c-46e2-a35f-a08d179b9c0a",
+			"key": "atmLocatorUrl",
+			"value": "https://template.postman-echo.com"
+		},
+		{
+			"id": "55f191f7-1343-484d-b007-28dc0a5fc653",
+			"key": "bankApiKey",
+			"value": "KeBnYLS0.MYvbswLr73CVJpSUrlF21"
+		},
+		{
+			"id": "f868aba2-edfa-4da1-861b-f873f3c3cb2c",
+			"key": "atmLocatorApiKey",
+			"value": "12345",
+			"type": "string"
+		}
+	]
+}
